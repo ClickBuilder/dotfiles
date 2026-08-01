@@ -1,0 +1,21 @@
+module player
+
+singleton PlayerState 1.0 PlayerState.qml
+singleton Settings    1.0 Settings.qml
+
+Player                1.0 Player.qml
+KeybindHandler        1.0 KeybindHandler.qml
+ThumbStrip            1.0 ThumbStrip.qml
+TrackInfo             1.0 TrackInfo.qml
+ControlsBar           1.0 ControlsBar.qml
+PlayerTabBar          1.0 PlayerTabBar.qml
+PlayerTrackList       1.0 PlayerTrackList.qml
+YtSearchBar           1.0 YtSearchBar.qml
+FilterBar             1.0 FilterBar.qml
+StatusBar             1.0 StatusBar.qml
+PlaylistPickerOverlay 1.0 PlaylistPickerOverlay.qml
+CreatePlaylistOverlay 1.0 CreatePlaylistOverlay.qml
+DeleteConfirmOverlay  1.0 DeleteConfirmOverlay.qml
+GotoOverlay           1.0 GotoOverlay.qml
+KeybindsOverlay       1.0 KeybindsOverlay.qml
+SettingsOverlay       1.0 SettingsOverlay.qml

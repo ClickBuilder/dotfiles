@@ -1,0 +1,1 @@
+sudo pacman -S neovim hyprland waybar slurp grim wl-clipboard thunar nvidia-open obsidian telegram-desktop wofi discord steam firefox lib32-nvidia-utils feh pulsemixer mumble mumble-server zerotier-one

@@ -1,0 +1,7 @@
+#!/bin/bash
+read -p "Тег: " tag
+DIR=$(mktemp -d)
+exiftool -r -if "\$Keywords =~ /$tag/" -p '$Directory/$FileName' ~/Pictures/ | while read f; do
+    ln -s "$f" "$DIR/"
+done
+yazi "$DIR"

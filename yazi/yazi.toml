@@ -1,0 +1,31 @@
+[mgr]
+show_hidden = false
+sort_by = "mtime"
+sort_reverse = false
+show_symlink = true
+linemode = "mtime"
+
+[manager.preview]
+max_width = 600
+max_height = 900
+[opener]
+image = [
+    { run = 'feh --auto-zoom --scale-down --geometry  "$(dirname "%s")" --start-at "%s"', desc = "feh" },
+]
+video = [
+    { run = 'mpv "%s"', desc = "mpv" },
+]
+
+[open]
+rules = [
+    { mime = "image/*", use = "image" },
+    { mime = "video/*", use = "video" },
+]
+
+
+
+
+
+
+
+

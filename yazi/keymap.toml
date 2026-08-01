@@ -1,0 +1,16 @@
+[mgr]
+prepend_keymap = [
+    { on = ["f", "t"], run = "shell '~/.config/yazi/scripts/ytag' --block", desc = "Find by tag" },
+	{ on = ["f", "d"], run ="plugin date-filter", desc = "Find by date (year → month → day)"},
+]
+#[[manager.prepend_keymap]]
+#on = ["d", "c"]
+#run = "remove"
+#desc = "Delete selected files"
+
+#[[manager.prepend_keymap]]
+#on = ["p", "d"]
+#run = "plugin date-filter"
+#desc = "Filter by date"
+
+

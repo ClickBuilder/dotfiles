@@ -1,0 +1,6 @@
+[manager]
+cwd = { fg = "cyan" }
+
+[[manager.prepend_rules]]
+name = "*"
+is_dir = false
