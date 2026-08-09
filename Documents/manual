@@ -1,0 +1,224 @@
+# $linux
+
+# Удалить диапозон файлов
+rm IMG_{8582..8594}.JPG
+# Удалить пачку конкретных файлов
+rm IMG_*.JPG_original
+# ripdrag
+# Выбора файлов через ls
+ripdrag $(ls IMG_9{227..261}.JPG 2>/dev/null)
+
+#darktable
+for f in ~/Pictures/IMG_9{559..572}.CR2; do
+    [ -f "$f" ] || continue
+    darktable-cli "$f" "$HOME/Pictures/$(basename "${f%.CR2}.jpg")"
+done
+
+# $gphoto2
+
+# Найти подключённую камеру
+gphoto2 --auto-detect
+
+# Информация о камере
+gphoto2 --summary
+
+# Список всех файлов на камере
+gphoto2 --list-files
+
+# Список папок
+gphoto2 --list-folders
+
+# Показать файлы в конкретной папке
+gphoto2 --folder /store_00010001/DCIM/100CANON --list-files
+
+# Скачать все файлы
+gphoto2 --get-all-files
+
+# Скачать конкретный файл по номеру (номер из --list-files)
+gphoto2 --get-file 5
+
+# Скачать диапазон файлов
+gphoto2 --get-file 3-10
+
+# Скачать в конкретную папку
+gphoto2 --get-all-files -P ~/Pictures/
+
+# Скачать только новые фото (не перезаписывать существующие)
+gphoto2 --get-all-files --skip-existing
+
+# Удалить конкретный файл по номеру
+gphoto2 --delete-file 5
+
+# Удалить диапазон
+gphoto2 --delete-file 3-10
+
+# Удалить все файлы
+gphoto2 --delete-all-files
+
+# Если файлы помечены как rd (read-only) --delete-all-files не сработает. Нужно указывать папку явно:
+
+gphoto2 --folder /store_00020001/DCIM/101CANON --delete-all-files
+
+# Скачать и сразу удалить с камеры
+gphoto2 --get-all-files --delete-all-files
+
+# Если камера не определяется
+# Убить процесс gvfs который захватывает камеру
+pkill gvfsd-gphoto2
+
+# Или через systemd
+systemctl --user stop gvfs-gphoto2-volume-monitor
+
+# $exiftool
+
+# Показать дату съёмки всех файлов
+exiftool -T -DateTimeOriginal -FileName ~/Pictures/* | sort
+
+# Добавить тег
+exiftool -Keywords="Alina" ~/Pictures/IMG_8606.JPG
+# Добавить теги от файла и до файла 
+exiftool -Keywords="Alina" ~/Pictures/IMG_{8606..8646}.JPG
+
+# $wf-recorder
+
+# Запись области
+wf-recorder -g "$(slurp)" -f video.mp4
+
+# Весь экран
+wf-recorder -f video.mp4
+
+# $cargo
+
+# Скачать
+cargo install netwatch-tui
+
+# Удалить
+cargo unnstall netwatch-tui
+
+# $tor 
+# sudo systemctl edit tor.service
+[Service]
+ExecStartPre=/bin/sleep 30
+
+# $journalctl
+
+# Оставить только последние 2 недели
+sudo journalctl --vacuum-time=2weeks
+
+# Проверить результат
+journalctl --disk-usage
+
+sudo nvim /etc/systemd/journald.conf
+
+[Journal]
+Storage=auto
+SystemMaxUse=200M
+SystemKeepFree=500M
+MaxRetentionSec=2weeks
+Compress=yes
+
+sudo systemctl restart systemd-journald
+
+sudo nvim /etc/fstab
+
+# Отключает загрузку
+Добавь noatime к опциям sdb2 (/) и sdb3 (/home):
+UUID=xxx  /      ext4  defaults,noatime  0 1
+UUID=xxx  /home  ext4  defaults,noatime  0 2
+
+# У тебя стоит mq-deadline — это хорошо для HDD, менять не нужно. Можно попробовать bfq для более отзывчивой системы во время работы:
+
+echo 'ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"' | sudo tee /etc/udev/rules.d/60-ioschedulers.rules
+
+sudo systemctl disable tor.service
+
+sudo systemctl start tor.service
+
+
+# $firefox
+# Часы в тулбаре (dd|mm|yy, hh:mm:ss) через fx-autoconfig
+
+# Клонировать загрузчик
+git clone https://github.com/MrOtherGuy/fx-autoconfig.git ~/Downloads/fx-autoconfig
+
+# Скопировать файлы загрузчика в папку Firefox
+sudo cp ~/Downloads/fx-autoconfig/program/config.js /usr/lib/firefox/
+sudo mkdir -p /usr/lib/firefox/defaults/pref/
+sudo cp ~/Downloads/fx-autoconfig/program/defaults/pref/config-prefs.js /usr/lib/firefox/defaults/pref/
+
+# Скопировать utils и resources в профиль (имя папки профиля смотреть в about:support)
+cp -r ~/Downloads/fx-autoconfig/profile/chrome/utils ~/.mozilla/firefox/ПРОФИЛЬ/chrome/
+cp -r ~/Downloads/fx-autoconfig/profile/chrome/resources ~/.mozilla/firefox/ПРОФИЛЬ/chrome/
+
+# Создать скрипт часов
+nvim ~/.mozilla/firefox/ПРОФИЛЬ/chrome/JS/clock.uc.js
+
+// ==UserScript==
+// @name Toolbar Clock
+// ==/UserScript==
+(function() {
+  const clock = document.createXULElement("label");
+  clock.style.cssText = `color:#ccc;font-size:11px;font-family:monospace;margin:0 6px;padding:0 4px;align-self:center;pointer-events:none;letter-spacing:0.5px;`;
+  const menuBtn = document.getElementById("PanelUI-button");
+  if (menuBtn) menuBtn.parentNode.insertBefore(clock, menuBtn);
+  function update() {
+    const n = new Date();
+    const p = v => String(v).padStart(2,"0");
+    clock.textContent = `${p(n.getDate())}|${p(n.getMonth()+1)}|${String(n.getFullYear()).slice(2)}, ${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+  }
+  update(); setInterval(update, 1000);
+})();
+
+# Включить userChrome.css в about:config
+toolkit.legacyUserProfileCustomizations.stylesheets = true
+
+# Очистить кэш и перезапустить Firefox
+rm -rf ~/.mozilla/firefox/ПРОФИЛЬ/startupCache/
+
+# Если случайно перезаписал /usr/bin/firefox
+sudo rm /usr/bin/firefox
+sudo ln -s /usr/lib/firefox/firefox /usr/bin/firefox
+
+
+# $windows 
+# Как получить файлы с винды
+# Создать толчку монтирования
+sudo mkdir -p /mnt/windows
+# Смонтировать раздел 
+sudo mount /dev/sdb1 /mnt/windows
+# Пользоваться
+
+# Workaround
+echo "options nvidia NVreg_EnableGpuFirmware=0" | sudo tee /etc/modprobe.d/nvidia-firmware.conf
+sudo mkinitcpio -P
+sudo reboot
+
+# Palette
+#241f31
+#4a3756
+#724e7c
+#7c4e4f
+#
+#Активный квадрат (фон)#724e7c — фиолетовый
+#Неактивный квадрат (фон)#241f31 — тёмный баклажан
+#Активная рамка#724e7c
+#Неактивная рамка#4a3d52 — приглушённый фиолетовый
+#Активная цифра#f0e6f5 — почти белый с фиолетовым оттенком
+#Неактивная цифра#9b8aa3 — серо-фиолетовый
+#
+
+# $flatpack proton-plus
+sudo pacman -S flatpak
+#Добавить flathub
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.vysp3r.ProtonPlus
+
+# $bin create link
+[wex@arch .dotfiles]$ sudo ln -s ./cr2tojpg.sh /usr/local/bin/cr2tojpg
+[sudo] password for wex: 
+[wex@arch .dotfiles]$ 
+
+# $cr2tojpg
+# Экспортирует файлы с помощью darktable из CR2 в jpg
+# Заранее вписанно IMG_<number>.CR2 Нужно только вписать номер фотографии
+cr2tojpg 9825

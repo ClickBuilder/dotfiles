@@ -1,0 +1,89 @@
+alacritty - Virtual terminal
+NixOs - distribution
+Niri - Window Manager
+disko - nix
+
+
+-- sys
+networkmanager
+openssh
+sudo
+ufw?
+zram-generator?
+zerotier-one
+--
+
+-- lib
+nvidia-open
+lib32-nvidia-utils
+vulkan-tools
+gamemode?
+mangohud?
+wine?
+winetricks?
+--
+
+-- utils
+grim
+slurp
+wl-clipboard
+wf-recorder
+swww - wallpaper ?
+--
+
+-- Other
+ncdu - check file size
+btop - monitoring
+quickshell - draw visual
+typst - Create Doc
+tor - browser
+tar?,zip, unzip - archivator
+songrec - music found utilite
+ripdrag - pick and drag'on drop
+pulsemixer - change system volume
+mpv,feh - audio video translator
+--
+
+--  Games
+https://github.com/ElyPrismLauncher - minecraft 
+lutris 
+qbittorent
+steam
+heroic
+--
+
+-- Programs
+steam
+firefox
+telegram
+discord
+vesktop?
+obsidian?
+obs
+darktable
+gphoto2
+typst
+tinymist
+rawtherapee
+thunar?
+mumble?
+--
+
+--cli 
+git
+neovim
+yazi
+fzf
+jq
+wget
+fastfetch
+yt-dlp
+ripgrep
+bat
+-- 
+
+-- Programming 
+go
+rust
+nodejs
+--

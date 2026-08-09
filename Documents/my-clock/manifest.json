@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "My Clock",
+  "version": "1.0",
+  "browser_action": {
+    "default_title": "Clock"
+  },
+  "background": {
+    "scripts": ["clock.js"]
+  },
+  "permissions": ["alarms"]
+}
